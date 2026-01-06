@@ -1,0 +1,11 @@
+services:
+  mongo:
+    # ports:
+    #   - "27017:27017" # optional (remove on real server)
+
+  api:
+    command: npm run start:prod
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.production
