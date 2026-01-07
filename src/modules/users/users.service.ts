@@ -32,6 +32,12 @@ export class UsersService {
     return this.userModel.create(data);
   }
 
+  async isAdmin(userId: string): Promise<boolean> {
+    const user = await this.findById(userId);
+    if (!user || !user.role) return false;
+    return this.roleService.isAdmin(user.role.toString());
+  }
+
   async findByVerificationToken(token: string): Promise<UserDocument | null> {
     const expires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes from now
 

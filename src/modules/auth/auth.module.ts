@@ -10,7 +10,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt-strategy';
 
 @Module({
-  imports: [ UsersModule, EmailsModule, RoleModule],
+  imports: [UsersModule, EmailsModule, RoleModule],
 
   providers: [AuthService, Logger, JwtStrategy],
   controllers: [AuthController],

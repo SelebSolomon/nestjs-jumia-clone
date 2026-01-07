@@ -11,6 +11,9 @@ import { EmailsModule } from './modules/emails/emails.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { BootstrapService } from './bootstrap/bootstrap.service';
+import { CloudinaryService } from './modules/cloudinary/cloudinary.service';
+import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 
 @Module({
   imports: [
@@ -45,8 +48,10 @@ import { BootstrapService } from './bootstrap/bootstrap.service';
     AuthModule,
     UsersModule,
     EmailsModule,
+    CloudinaryModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
-  providers: [AppService, Logger, BootstrapService],
+  providers: [AppService, Logger, BootstrapService, CloudinaryService],
 })
 export class AppModule {}

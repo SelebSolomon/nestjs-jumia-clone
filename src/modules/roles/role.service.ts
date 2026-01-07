@@ -15,6 +15,15 @@ import { CreateRoleDto } from './dto/role-dto';
 @Injectable()
 export class RolesService {
   constructor(@InjectModel(Role.name) private roleModel: Model<RoleDocument>) {}
+
+  async isAdmin(roleId: string): Promise<boolean> {
+    const role = await this.roleModel.findOne({ _id: roleId });
+
+    if (!role) return false;
+
+    return role.name === RoleName.Admin;
+  }
+
   /**
    * Get admin role - used when creating admin users
    */
