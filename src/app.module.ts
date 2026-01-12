@@ -14,6 +14,11 @@ import { BootstrapService } from './bootstrap/bootstrap.service';
 import { CloudinaryService } from './modules/cloudinary/cloudinary.service';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { RedisConfig } from './config/redis.config';
+import { CacheModule } from '@nestjs/cache-manager';
+import { ProductsModule } from './modules/products/products.module';
+import { CartsModule } from './modules/carts/carts.module';
+import { OrdersModule } from './modules/orders/orders.module';
 
 @Module({
   imports: [
@@ -26,6 +31,7 @@ import { CategoriesModule } from './modules/categories/categories.module';
           : '.env.development',
     }),
     PassportModule,
+    CacheModule.registerAsync(RedisConfig),
     JwtModule.registerAsync({
       global: true,
       inject: [ConfigService],
@@ -50,6 +56,9 @@ import { CategoriesModule } from './modules/categories/categories.module';
     EmailsModule,
     CloudinaryModule,
     CategoriesModule,
+    ProductsModule,
+    CartsModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService, Logger, BootstrapService, CloudinaryService],

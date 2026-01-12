@@ -51,5 +51,5 @@ CategorySchema.pre('save', function () {
 });
 
 // Optional: Additional indexes for performance
-CategorySchema.index({ name: 1 });
-CategorySchema.index({ slug: 1 });
+// CategorySchema.index({ name: 1 });
+// CategorySchema.index({ slug: 1 });

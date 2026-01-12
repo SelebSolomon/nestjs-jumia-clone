@@ -91,8 +91,8 @@ Handles:
 | `/api/products`     | GET    | List all products (filter/sort/paginate) |
 | `/api/products/:id` | GET    | Product details                          |
 | `/api/products`     | POST   | Seller/Admin: add product                |
-| `/api/products/:id` | PATCH  | Seller/Admin: update product             |
-| `/api/products/:id` | DELETE | Seller/Admin: remove product             |
+| `/api/products/:id` | PATCH  | Admin: update product             |
+| `/api/products/:id` | DELETE | Admin: remove product             |
 
 **Extra:** search, filter by category, price range, seller.
 

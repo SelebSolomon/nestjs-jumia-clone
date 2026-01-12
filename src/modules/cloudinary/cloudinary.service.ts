@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   v2 as cloudinary,
   UploadApiResponse,
@@ -9,26 +9,27 @@ import { CLOUDINARY_ROOT_FOLDER } from './cloudinary.config';
 
 @Injectable()
 export class CloudinaryService {
+  private readonly logger = new Logger(CloudinaryService.name);
+
   uploadImage(
     file: Express.Multer.File,
-    subFolder: string, // e.g., 'products', 'categories', 'users'
+    subFolder: string,
   ): Promise<{ url: string; publicId: string }> {
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          folder: `${CLOUDINARY_ROOT_FOLDER}/${subFolder}`, // <-- All uploads go under nestjs-jumia
+          folder: `${CLOUDINARY_ROOT_FOLDER}/${subFolder}`,
           resource_type: 'image',
           transformation: [{ quality: 'auto', fetch_format: 'auto' }],
         },
         (error?: UploadApiErrorResponse, result?: UploadApiResponse) => {
-          if (error)
-            return reject(new InternalServerErrorException(error.message));
-          if (!result)
+          if (error) return reject(error);
+
+          if (!result) {
             return reject(
-              new InternalServerErrorException(
-                'Cloudinary upload failed: no result returned',
-              ),
+              new Error('Cloudinary upload failed: no result returned'),
             );
+          }
 
           resolve({
             url: result.secure_url,
@@ -41,12 +42,18 @@ export class CloudinaryService {
     });
   }
 
-  async deleteImage(publicId: string): Promise<void> {
+  async deleteImage(publicId?: string): Promise<void> {
+    if (!publicId) return; // ✅ safe guard
+
     try {
-      await cloudinary.uploader.destroy(publicId, { resource_type: 'image' });
+      await cloudinary.uploader.destroy(publicId, {
+        resource_type: 'image',
+      });
     } catch (error) {
-      throw new InternalServerErrorException(
-        `Failed to delete image: ${error.message}`,
+      // ✅ LOG — DO NOT THROW
+      this.logger.error(
+        `Cloudinary delete failed for publicId=${publicId}`,
+        error,
       );
     }
   }

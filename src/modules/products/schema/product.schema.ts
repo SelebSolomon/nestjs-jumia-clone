@@ -19,6 +19,9 @@ export class Product {
   @Prop({ required: true })
   price: number;
 
+  @Prop({ default: true })
+  isActive: boolean;
+
   @Prop({ required: true, trim: true })
   description: string;
 
@@ -42,6 +45,8 @@ export class Product {
 
   @Prop({ default: 0 })
   ratings: number;
+  @Prop({ default: 0 })
+  numberOfReviews: number;
 
   @Prop({ unique: true })
   slug: string;
@@ -67,12 +72,11 @@ ProductSchema.virtual('inStock').get(function (this: ProductDocument) {
   return this.stock > 0 ? 'Available' : 'Out of stock';
 });
 
-// Pre-save hook to generate slug
-ProductSchema.pre('save', function (next: (err?: any) => void) {
+ProductSchema.pre('save', function () {
   if (this.isModified('name')) {
     this.set('slug', slugify(this.get('name'), { lower: true }));
   }
-  next();
+  // no next() call at all
 });
 
 // Indexes

@@ -1,12 +1,12 @@
 services:
-  mongo:
+  redis:
     ports:
-      - "27017:27017"   # 👈 Compass access
-
+      - "6381:6379"  # 👈 RedisInsight access
+  
   api:
-    command: npm run start:dev
+    command: sh -c "npm install && npm run start:dev"
     ports:
-      - "3000:3000"
+      - "4000:4000"
     env_file:
       - .env.development
     volumes:

@@ -1,17 +1,27 @@
-
 services:
   mongo:
     image: mongo:7
+    ports:
+      - "27018:27017"
     container_name: jumai-mongo
     restart: always
     volumes:
       - mongo_data:/data/db
+
+  redis:
+    image: redis:7-alpine
+    container_name: jumai-redis
+    restart: always
+    volumes:
+      - redis_data:/data
 
   api:
     build: .
     container_name: jumai-api
     depends_on:
       - mongo
+      - redis
 
 volumes:
   mongo_data:
+  redis_data:

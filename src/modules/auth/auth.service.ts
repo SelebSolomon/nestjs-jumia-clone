@@ -48,7 +48,7 @@ export class AuthService {
     );
 
     if (existingUser) {
-      throw new ConflictException(error.categoryAlreadyExists);
+      throw new ConflictException(error.userAlreadyExists);
     }
 
     // Step 2: Hash password
@@ -195,6 +195,7 @@ export class AuthService {
       throw new NotFoundException(error.invalidCredentials);
     }
 
+    console.log('hello world');
     if (!existingUser.isActive || !existingUser.emailVerified) {
       throw new BadRequestException(error.validationError);
     }
