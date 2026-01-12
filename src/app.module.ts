@@ -19,6 +19,8 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { ProductsModule } from './modules/products/products.module';
 import { CartsModule } from './modules/carts/carts.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { PaymentsModule } from './modules/payments/payments.module';
+import { StripeModule } from './modules/stripe/stripe.module';
 
 @Module({
   imports: [
@@ -59,6 +61,8 @@ import { OrdersModule } from './modules/orders/orders.module';
     ProductsModule,
     CartsModule,
     OrdersModule,
+    PaymentsModule,
+    StripeModule,
   ],
   controllers: [AppController],
   providers: [AppService, Logger, BootstrapService, CloudinaryService],

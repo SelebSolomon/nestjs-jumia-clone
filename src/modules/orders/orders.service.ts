@@ -29,6 +29,18 @@ export class OrdersService {
     private productService: ProductsService,
     private userservice: UsersService,
   ) {}
+
+  async findOrder(orderId: string, userId: string) {
+    return this.orderModel.findOne({
+      _id: orderId,
+      user: userId,
+      isActive: true,
+    });
+  }
+
+  async findById(id: string) {
+    return this.orderModel.findById(id);
+  }
   async createOrder(userId: string, createOrderDto: CreateOrderDto) {
     const userObject = new Types.ObjectId(userId);
     // const order = await this.orderModel.find({ user: userObject });
@@ -37,7 +49,6 @@ export class OrdersService {
       .findOne({ user: userObject })
       .populate('items.product');
 
-    console.log('carts is logged right here', cart);
     if (!cart || cart.items.length < 0) {
       this.logger.error('Cart is empty');
       throw new NotFoundException('Cart Is Empty');

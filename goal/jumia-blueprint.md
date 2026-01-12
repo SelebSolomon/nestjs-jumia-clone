@@ -91,8 +91,8 @@ Handles:
 | `/api/products`     | GET    | List all products (filter/sort/paginate) |
 | `/api/products/:id` | GET    | Product details                          |
 | `/api/products`     | POST   | Seller/Admin: add product                |
-| `/api/products/:id` | PATCH  | Admin: update product             |
-| `/api/products/:id` | DELETE | Admin: remove product             |
+| `/api/products/:id` | PATCH  | Admin: update product                    |
+| `/api/products/:id` | DELETE | Admin: remove product                    |
 
 **Extra:** search, filter by category, price range, seller.
 
@@ -137,10 +137,10 @@ Handles:
 **Controller (`payments.controller.ts`)**
 
 | Route                      | Method | Purpose                       |
-| -------------------------- | ------ | ----------------------------- |
+| -------------------------- | ------ | ----------------------------- | ------- |
 | `/api/payments/pay`        | POST   | Pay for order (Stripe/PayPal) |
 | `/api/payments/:id`        | GET    | Payment status                |
-| `/api/payments/:id/refund` | PATCH  | Refund payment                |
+| `/api/payments/:id/refund` | PATCH  | Refund payment                | // TODO |
 
 ---
 

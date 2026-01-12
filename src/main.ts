@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { Logger, VersioningType } from '@nestjs/common';
+import { json, raw } from 'express';
 
 let isBootstrapping = false;
 
@@ -16,6 +17,12 @@ async function bootstrap() {
 
   try {
     const app = await NestFactory.create(AppModule);
+
+    app.use('/api/v1/payments/webhook', raw({ type: 'application/json' }));
+
+    // All other routes: normal JSON parsing
+    app.use(json());
+
     const loggerInstance = app.get(Logger);
     app.useGlobalFilters(new HttpExceptionFilter(loggerInstance));
     app.setGlobalPrefix('api');
