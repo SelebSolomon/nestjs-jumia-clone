@@ -41,6 +41,38 @@ export class OrdersService {
   async findById(id: string) {
     return this.orderModel.findById(id);
   }
+
+  async findAllOrders(query: OrderQuery) {
+    const {
+      page = 1,
+      paymentStatus,
+      limit = 20,
+      sort = '-createdAt',
+      shippingStatus,
+    } = query;
+
+    let filter: any = {};
+
+    if (shippingStatus) {
+      filter.shippingStatus = shippingStatus;
+    }
+
+    if (paymentStatus) {
+      filter.paymentStatus = paymentStatus;
+    }
+
+    let skip = (page - 1) * limit;
+
+    const orders = await this.orderModel
+      .find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    return orders;
+  }
+
   async createOrder(userId: string, createOrderDto: CreateOrderDto) {
     const userObject = new Types.ObjectId(userId);
     // const order = await this.orderModel.find({ user: userObject });

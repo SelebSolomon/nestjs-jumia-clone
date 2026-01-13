@@ -21,10 +21,10 @@ export class ReviewsController {
     @Req() req: { user: { sub: string } },
     @Body() createReviewDto: CreateReviewDto,
   ) {
-    return this.reviewsService.review(userId: req.user.sub, createReviewDto);
+    return this.reviewsService.createReview(createReviewDto, req.user.sub);
   }
 
-    @Get(':productId')
+  @Get(':productId')
   getReviewsForProduct(@Param('productId') productId: string) {
     return this.reviewsService.getReviewsForProduct(productId);
   }

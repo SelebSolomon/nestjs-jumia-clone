@@ -15,6 +15,7 @@ import { UpdateMeDTO } from './dto/update-me-dto';
 import { CreateAdminDto } from './dto/create-admin-role-dto';
 import { RoleName } from '../roles/enums/roles-enums';
 import { AdminUpdateUserDto } from './dto/admin-update-user-dto';
+import { UserQuery } from './interface/user-query';
 
 @Injectable()
 export class UsersService {
@@ -23,6 +24,27 @@ export class UsersService {
     private roleService: RolesService,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
+
+  async adminFindAllUsers(query: UserQuery) {
+    const { page, limit, status, search } = query;
+
+    let filter: any = {};
+
+    if (status) {
+      filter.status = status;
+    }
+
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+      ];
+    }
+
+    const skip = (page - 1) * limit;
+
+    return await this.userModel.find(filter).sort({ createdAt: -1 }).skip(skip);
+  }
 
   async findUserByEmail(email: string) {
     return await this.userModel.findOne({ email });
