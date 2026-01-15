@@ -13,7 +13,7 @@ export class BootstrapService implements OnModuleInit {
     private readonly usersService: UsersService,
     private readonly rolesService: RolesService,
   ) {}
-/////
+
   async onModuleInit() {
     try {
       const admins = await this.usersService.findByRole(RoleName.Admin);
