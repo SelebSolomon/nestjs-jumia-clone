@@ -1,4 +1,5 @@
 // src/users/dto/signup.dto.ts
+import { InputType } from '@nestjs/graphql';
 import {
   IsString,
   IsEmail,

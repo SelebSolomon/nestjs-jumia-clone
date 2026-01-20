@@ -1,4 +1,4 @@
-import { Logger, Module } from '@nestjs/common';
+import { ExecutionContext, Logger, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -22,6 +22,12 @@ import { OrdersModule } from './modules/orders/orders.module';
 import { PaymentsModule } from './modules/payments/payments.module';
 import { StripeModule } from './modules/stripe/stripe.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { minutes, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { AppRolver } from './app.resolver';
 
 @Module({
   imports: [
@@ -53,6 +59,34 @@ import { AdminModule } from './modules/admin/admin.module';
         },
       }),
     }),
+
+    // ThrottlerModule.forRootAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   useFactory: (config: ConfigService) => ({
+    //     throttlers: [
+    //       {
+    //         ttl: Number(config.get('THROTTLE_TTL')),
+    //         limit: Number(config.get('THROTTLE_LIMIT')),
+    //         blockDuration: minutes(Number(config.get('BLOCK_DURATION'))),
+    //       },
+    //     ],
+    //     errorMessage: 'Too many request please slow down',
+    //     getTracker: (req: Record<string, any>, context: ExecutionContext) => {
+    //       context: ({ req, res }) => ({ req, res });
+    //       return req.ip;
+    //     },
+    //   }),
+    // }),
+
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      playground: false,
+      autoSchemaFile: 'src/schema.gql',
+      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      context: ({ req, res }) => ({ req, res }),
+    }),
+
     RoleModule,
     AuthModule,
     UsersModule,
@@ -67,6 +101,16 @@ import { AdminModule } from './modules/admin/admin.module';
     AdminModule,
   ],
   controllers: [AppController],
-  providers: [AppService, Logger, BootstrapService, CloudinaryService],
+  providers: [
+    AppRolver,
+    AppService,
+    Logger,
+    BootstrapService,
+    CloudinaryService,
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard,
+    // },
+  ],
 })
 export class AppModule {}

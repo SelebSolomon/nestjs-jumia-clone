@@ -1,0 +1,45 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type RegisterGraphqlQlType {
+  id: ID!
+  name: String!
+  email: String!
+  role: String!
+  address: [String!]
+  phone: String
+}
+
+type RegisterResponseType {
+  status: String!
+  data: RegisterGraphqlQlType!
+}
+
+type VerifyEmailGraphqlQlType {
+  message: String!
+}
+
+type VerifyEmailResponseType {
+  status: String!
+  data: VerifyEmailGraphqlQlType!
+}
+
+type Query {
+  health: String!
+}
+
+type Mutation {
+  register(input: SignupInput!): RegisterResponseType!
+  resendVerificationEmail(email: String!): Boolean!
+  verifyEmail(token: String!): VerifyEmailResponseType!
+}
+
+input SignupInput {
+  name: String!
+  email: String!
+  password: String!
+  role: String!
+  address: [String!]
+  phone: String
+}

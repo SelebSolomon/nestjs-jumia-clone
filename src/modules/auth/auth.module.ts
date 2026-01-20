@@ -8,11 +8,12 @@ import { RoleModule } from '../roles/role.module';
 import { JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt-strategy';
+import { AuthResolver } from './auth.resolver';
 
 @Module({
   imports: [UsersModule, EmailsModule, RoleModule],
 
-  providers: [AuthService, Logger, JwtStrategy],
+  providers: [AuthResolver, AuthService, Logger, JwtStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}

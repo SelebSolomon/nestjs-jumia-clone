@@ -17,6 +17,9 @@ import { UpdatePasswordDto } from './dto/update-password-dto';
 import { ForgotPasswordDto } from './dto/forgot-password-dto';
 import { ResetPasswordDto } from './dto/reset-password-dto';
 import { JwtAuthGuard } from './guards/jwt-guard';
+import { RegisterRestResponse } from './auth-response/register-reponse';
+import { ResendEmailToken } from './dto/resend-email-token';
+import { VerifyEmailRestResponse } from './auth-response/verify-email-response';
 // import { AuthorizationGuard } from './guards/authorization-guards';
 
 @Controller('auth')
@@ -24,13 +27,39 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('register')
-  async register(@Body() registerDto: SignupDto) {
-    return this.authService.register(registerDto);
+  async register(
+    @Body() registerDto: SignupDto,
+  ): Promise<RegisterRestResponse<any>> {
+    const result = await this.authService.register(registerDto);
+
+    return {
+      status: result.status,
+      data: {
+        id: result.data.newUser.id,
+        name: result.data.newUser.name,
+        email: result.data.newUser.email,
+        role: result.data.newUser.role,
+        address: result.data.newUser.address,
+        phone: result.data.newUser.phone,
+      },
+    };
+  }
+
+  @Post('resend-email-token')
+  async resendVerificationEmail(@Body() email: ResendEmailToken) {
+    return this.authService.resendVerificationEmail(email.email);
   }
 
   @Patch('verify-email')
-  async verifyEmail(@Query('token') token: string) {
-    return this.authService.verifyEmail(token);
+  async verifyEmail(
+    @Query('token') token: string,
+  ): Promise<VerifyEmailRestResponse> {
+    const result = await this.authService.verifyEmail(token);
+
+    return {
+      status: result.status,
+      message: result.message,
+    };
   }
 
   @Post('login')

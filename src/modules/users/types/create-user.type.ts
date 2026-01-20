@@ -7,6 +7,7 @@ export type CreateUserInput = {
   role: Types.ObjectId;
   phone?: string;
   emailVerificationToken?: string;
+  emailVerificationTokenExpires?: Date;
   emailVerified?: boolean;
   isActive?: boolean;
 };

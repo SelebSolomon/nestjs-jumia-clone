@@ -43,8 +43,8 @@ export class EmailsService {
       host: 'smtp.ethereal.email',
       port: 587,
       auth: {
-        user: 'nakia.jacobs5@ethereal.email',
-        pass: 'FttmnqCDSpu5STBTdj',
+        user: 'melody45@ethereal.email',
+        pass: 'FMEkBrGf8jvcxB9Dww',
       },
     });
     this.verifyConnection();

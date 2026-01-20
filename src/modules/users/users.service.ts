@@ -61,12 +61,11 @@ export class UsersService {
   }
 
   async findByVerificationToken(token: string): Promise<UserDocument | null> {
-    const expires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes from now
+    // const expires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes from now
 
     return await this.userModel
       .findOne({
         emailVerificationToken: token,
-        emailVerificationTokenExpires: expires,
       })
       .exec();
   }

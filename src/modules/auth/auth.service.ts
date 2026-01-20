@@ -64,6 +64,7 @@ export class AuthService {
       .update(verificationToken)
       .digest('hex');
 
+    const expires = new Date(Date.now() + 15 * 60 * 1000);
     // Step 5: Create user with role
     const newUser = await this.userService.create({
       name: registerDto.name,
@@ -71,6 +72,7 @@ export class AuthService {
       password: hashedPassword,
       role: defaultRole._id,
       emailVerificationToken: hashedToken,
+      emailVerificationTokenExpires: expires,
       emailVerified: false,
       isActive: true,
       phone: registerDto.phone,
@@ -84,6 +86,13 @@ export class AuthService {
       verificationToken,
       newUser.name,
     );
+
+    return {
+      status: 'success',
+      data: {
+        newUser,
+      },
+    };
   }
 
   /**
@@ -106,7 +115,7 @@ export class AuthService {
 
     if (user.emailVerified) {
       return {
-        success: true,
+        status: 'success',
         message: 'Email already verified',
       };
     }
@@ -135,6 +144,9 @@ export class AuthService {
    * Resend verification email
    */
   async resendVerificationEmail(email: string) {
+    if (!email) {
+      throw new BadRequestException('Bad request');
+    }
     const user = await this.userService.findUserByEmail(email);
 
     if (!user) {
