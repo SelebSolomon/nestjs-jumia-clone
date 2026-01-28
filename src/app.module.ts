@@ -37,7 +37,7 @@ import { AppRolver } from './app.resolver';
       envFilePath:
         process.env.NODE_ENV === 'production'
           ? '.env.production'
-          : '.env.development', ///
+          : '.env.development', //
     }),
     PassportModule,
     CacheModule.registerAsync(RedisConfig),
